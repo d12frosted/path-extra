@@ -1,0 +1,30 @@
+name:                d12-hs-path
+version:             0.1.0.0
+synopsis:            Path helpers for my personal projects
+description:         Please see README.org
+homepage:            https://github.com/d12frosted/d12-hs-path
+license:             BSD3
+license-file:        LICENSE
+author:              Boris Buliga
+maintainer:          d12frosted@gmail.com
+copyright:           2016 Boris Buliga
+category:            Development
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Path.Parse
+  build-depends:       base >= 4.7 && < 5
+                     , d12-hs-env
+                     , exceptions >= 0.8 && < 0.9
+                     , path >= 0.5
+                     , text >= 0.11 && < 2.0
+                     , transformers >= 0.4
+                     , directory >= 1.2
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/d12frosted/d12-hs-path
