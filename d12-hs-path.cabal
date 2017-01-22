@@ -3,11 +3,11 @@ version:             0.1.0.0
 synopsis:            Path helpers for my personal projects
 description:         Please see README.org
 homepage:            https://github.com/d12frosted/d12-hs-path
-license:             BSD3
+license:             MIT
 license-file:        LICENSE
 author:              Boris Buliga
-maintainer:          d12frosted@gmail.com
-copyright:           2016 Boris Buliga
+maintainer:          boris@d12frosted.io
+copyright:           2016-2017 Boris Buliga
 category:            Development
 build-type:          Simple
 -- extra-source-files:
