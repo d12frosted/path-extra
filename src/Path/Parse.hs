@@ -132,8 +132,8 @@ extractAtoms = Text.splitOn "/"
 -- | Expand atom.
 expandAtom :: (MonadThrow m, MonadIO m) => Text -> m Text
 expandAtom atom
-  | Text.isPrefixOf "$" atom = env $ strip "$" atom
-  | Text.isPrefixOf "~" atom = env "HOME"
+  | Text.isPrefixOf "$" atom = getEnv $ strip "$" atom
+  | Text.isPrefixOf "~" atom = getEnv "HOME"
   | otherwise = pure atom
   where strip p v =
           fromMaybe v $ Text.stripPrefix p v
