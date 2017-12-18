@@ -7,12 +7,11 @@ resolver: lts-9.20
 # Local packages, usually specified by relative directory name
 packages:
 - '.'
-- location:
-    git: https://github.com/d12frosted/d12-hs-env
-    commit: b91c740511f090505555a532f55edd9672a74a32
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- git: git@github.com:d12frosted/d12-hs-env.git
+  commit: 6ad7e35254c329f2325366f3ce51d76e95700199
 
 # Override default flag values for local packages and extra-deps
 flags: {}

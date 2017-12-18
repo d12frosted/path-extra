@@ -17,7 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Path.Parse
   build-depends:       base >= 4.7 && < 5
-                     , d12-hs-env >= 0.1
+                     , d12-hs-env == 0.1.1.0
                      , exceptions >= 0.8 && < 0.9
                      , path >= 0.5
                      , text >= 1.0 && < 2.0
