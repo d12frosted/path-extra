@@ -5,20 +5,20 @@ Path helpers for my personal projects. Currently exposes only one module -
 show you two functions which I use the most.
 
 #+BEGIN_SRC haskell
-λ> :t parseFilePath
-parseFilePath
-  :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
-λ> parseFilePath "$XDG_CONFIG_HOME/.gitignore"
-"/Users/d12frosted/.environment/.gitignore"
-λ> :t parseDirPath
-parseDirPath
-  :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
-λ> parseDirPath "$XDG_CONFIG_HOME"
-"/Users/d12frosted/.environment/"
-λ> parseDirPath "$FALSE"
-*** Exception: Could not find value of $FALSE in environment.
-λ> parseDirPath "~/Developer"
-"/Users/d12frosted/Developer/"
+  λ> :t parseFilePath
+  parseFilePath
+    :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
+  λ> parseFilePath "$XDG_CONFIG_HOME/.gitignore"
+  "/Users/d12frosted/.environment/.gitignore"
+  λ> :t parseDirPath
+  parseDirPath
+    :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
+  λ> parseDirPath "$XDG_CONFIG_HOME"
+  "/Users/d12frosted/.environment/"
+  λ> parseDirPath "$FALSE"
+  *** Exception: Could not find value of $FALSE in environment.
+  λ> parseDirPath "~/Developer"
+  "/Users/d12frosted/Developer/"
 #+END_SRC
 
 Both of them are great for parsing path from user input. Because they expand
@@ -26,3 +26,15 @@ environment variables and =~/=.
 
 At some extent this library was created after [[https://github.com/d12frosted/CanonicalPath][CanonicalPath]] was deprecated.
 Thanks to Chris Done now we have a better type for path.
+
+** Using with ~stack~
+
+Just add =d12-hs-path= to =stack.yaml= file.
+
+#+BEGIN_SRC yaml
+  packages:
+  - '.'
+  - location:
+      git: https://github.com/d12frosted/d12-hs-path
+      commit: 3c73e7babb05ba7963ede84465ec6a12314182df
+#+END_SRC
