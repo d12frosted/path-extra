@@ -32,9 +32,7 @@ Thanks to Chris Done now we have a better type for path.
 Just add =d12-hs-path= to =stack.yaml= file.
 
 #+BEGIN_SRC yaml
-  packages:
-  - '.'
-  - location:
-      git: https://github.com/d12frosted/d12-hs-path
-      commit: 3c73e7babb05ba7963ede84465ec6a12314182df
+  extra-deps:
+  - git: https://github.com/d12frosted/d12-hs-path
+    commit: 14cbcc18d1390659d1064aaf7881a5318000fc45
 #+END_SRC
