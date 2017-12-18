@@ -14,10 +14,10 @@ module Path.Parse
        ,getWorkingDir) where
 
 --------------------------------------------------------------------------------
--- * Internal imports
+-- Internal imports
 
 --------------------------------------------------------------------------------
--- * External imports
+-- External imports
 
 import           Control.Exception
 import           Control.Monad
@@ -37,7 +37,7 @@ import           Prelude
 import qualified System.Directory       as D
 
 --------------------------------------------------------------------------------
--- * PathIOException definition
+-- PathIOException definition
 
 data PathIOException
   = InvalidDir FilePath
@@ -51,7 +51,7 @@ instance Show PathIOException where
   show (InvalidFile fp) = "'" ++ fp ++ "' is not a file."
 
 --------------------------------------------------------------------------------
--- * Parsers
+-- Parsers
 
 -- | Get a location for an absolute directory. Produces a normalized
 --  path which always ends in a path separator.
