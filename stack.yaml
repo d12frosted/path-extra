@@ -10,7 +10,7 @@ packages:
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
 extra-deps:
-- git: git@github.com:d12frosted/d12-hs-env.git
+- git: https://github.com/d12frosted/d12-hs-env
   commit: 6ad7e35254c329f2325366f3ce51d76e95700199
 
 # Override default flag values for local packages and extra-deps
