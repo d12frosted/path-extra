@@ -1,5 +1,7 @@
 * ~d12-hs-path~
 
+[[https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master][file:https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master]]
+
 Path helpers for my personal projects. Currently exposes only one module -
 ~Path.Parse~. Please refer to it for list of all exposed functions. But let me
 show you two functions which I use the most.
