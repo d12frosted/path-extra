@@ -2,7 +2,7 @@ name:                d12-hs-path
 version:             0.1.0.0
 synopsis:            Path helpers for my personal projects
 description:         Please see README.org
-homepage:            https://github.com/d12frosted/d12-hs-path
+homepage:            https://gitlab.com/d12frosted/d12-hs-path
 license:             MIT
 license-file:        LICENSE
 author:              Boris Buliga
@@ -18,13 +18,13 @@ library
   exposed-modules:     Path.Parse
   build-depends:       base >= 4.7 && < 5
                      , d12-hs-env == 0.1.1.0
-                     , exceptions >= 0.8 && < 0.9
+                     , exceptions >= 0.8
                      , path >= 0.5
                      , text >= 1.0 && < 2.0
-                     , transformers == 0.5.2.0
+                     , transformers >= 0.5.2.0
                      , directory >= 1.2
   default-language:    Haskell2010
 
 source-repository head
   type:     git
-  location: https://github.com/d12frosted/d12-hs-path
+  location: https://gitlab.com/d12frosted/d12-hs-path

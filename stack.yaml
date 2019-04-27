@@ -2,7 +2,7 @@
 # For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration/
 
 # Specifies the GHC version and set of packages available (e.g., lts-3.5, nightly-2015-09-21, ghc-7.10.2)
-resolver: lts-9.20
+resolver: lts-13.18
 
 # Local packages, usually specified by relative directory name
 packages:
@@ -10,8 +10,8 @@ packages:
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
 extra-deps:
-- git: https://github.com/d12frosted/d12-hs-env
-  commit: 6ad7e35254c329f2325366f3ce51d76e95700199
+- git: https://gitlab.com/d12frosted/d12-hs-env
+  commit: b306c70b4a50e2ae2ffc1fe3a84209e00af51ead
 
 # Override default flag values for local packages and extra-deps
 flags: {}
