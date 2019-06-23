@@ -36,5 +36,5 @@ Just add =d12-hs-path= to =stack.yaml= file.
 #+BEGIN_SRC yaml
   extra-deps:
   - git: https://github.com/d12frosted/d12-hs-path
-    commit: 14cbcc18d1390659d1064aaf7881a5318000fc45
+    commit: 79a53c27e7e27ed8b7fab8102e43c6815d4ca104
 #+END_SRC
