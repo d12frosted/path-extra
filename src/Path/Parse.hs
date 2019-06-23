@@ -4,14 +4,16 @@
 {-# LANGUAGE OverloadedStrings  #-}
 
 module Path.Parse
-       (module Path
-       ,parseAbsDir
-       ,parseRelDir
-       ,parseDirPath
-       ,parseAbsFile
-       ,parseRelFile
-       ,parseFilePath
-       ,getWorkingDir) where
+       ( module Path
+       , canonicalizePath
+       , getWorkingDir
+       , parseAbsDir
+       , parseAbsFile
+       , parseDirPath
+       , parseFilePath
+       , parseRelDir
+       , parseRelFile
+       ) where
 
 --------------------------------------------------------------------------------
 -- Internal imports
