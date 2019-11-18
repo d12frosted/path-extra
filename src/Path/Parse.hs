@@ -1,7 +1,11 @@
+--------------------------------------------------------------------------------
+
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE NoImplicitPrelude  #-}
 {-# LANGUAGE OverloadedStrings  #-}
+
+--------------------------------------------------------------------------------
 
 module Path.Parse
        ( module Path
@@ -16,10 +20,6 @@ module Path.Parse
        ) where
 
 --------------------------------------------------------------------------------
--- Internal imports
-
---------------------------------------------------------------------------------
--- External imports
 
 import           Control.Exception
 import           Control.Monad
@@ -125,7 +125,7 @@ canonicalizePath fp = expandPath fp >>=
 -- | Expand path by expanding all extracted atoms. In other words, replace all
 -- environment variables by their valus and `~/` by value of $HOME.
 expandPath :: (MonadThrow m, MonadIO m) => Text -> m Text
-expandPath fp = liftM (Text.intercalate "/") (traverse expandAtom (extractAtoms fp))
+expandPath fp = fmap (Text.intercalate "/") (traverse expandAtom (extractAtoms fp))
 
 -- | Extract atoms of given path.
 extractAtoms :: Text -> [Text]
@@ -161,3 +161,5 @@ verifyFile fp =
   \case
     True -> return fp
     False -> throwM $ InvalidFile fp
+
+--------------------------------------------------------------------------------
