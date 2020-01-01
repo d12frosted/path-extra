@@ -1,6 +1,6 @@
 * ~path-extra~
 
-[[https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master][file:https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master]]
+[[https://github.com/d12frosted/path-extra/workflows/CI/badge.svg][file:https://github.com/d12frosted/path-extra/workflows/CI/badge.svg]]
 
 Path helpers for my personal projects. Currently exposes only one module -
 ~Path.Parse~. Please refer to it for list of all exposed functions. But let me
