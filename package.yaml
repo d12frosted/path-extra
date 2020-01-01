@@ -19,3 +19,13 @@ dependencies:
 
 library:
   source-dirs: src
+
+tests:
+  path-extra-test:
+    main:                Spec.hs
+    source-dirs:         test
+    dependencies:
+    - path-extra
+    - env-extra
+    - tasty
+    - tasty-hunit
