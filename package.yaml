@@ -1,0 +1,21 @@
+name:                path-extra
+version:             0.1.0.0
+github:              d12frosted/path-extra
+license:             MIT
+author:              "Boris Buliga"
+maintainer:          "boris@d12frosted.io"
+copyright:           "2016-2020 Boris Buliga"
+
+description:         Please see the README on GitHub at <https://github.com/d12frosted/path-exta>
+
+dependencies:
+- base >= 4.7 && < 5
+- env-extra == 1.0.0.0
+- exceptions >= 0.8
+- path >= 0.5
+- text >= 1.0 && < 2.0
+- transformers >= 0.5.2.0
+- directory >= 1.2
+
+library:
+  source-dirs: src
