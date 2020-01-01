@@ -1,3 +1,10 @@
+-- | This module defines functions to parse type safe file paths from strings
+-- containing Unix environment variables (e.g. $HOME).
+--
+-- In most cases one should use 'parseDirPath' and 'parseFilePath' as they take
+-- care of any variables expansion and work also with relative paths successfully
+-- converting them into absolute.
+
 --------------------------------------------------------------------------------
 
 {-# LANGUAGE DeriveDataTypeable #-}
@@ -23,20 +30,20 @@ module Path.Parse
 
 import           Control.Exception
 import           Control.Monad
-import           Control.Monad.Catch    (MonadThrow (..))
+import           Control.Monad.Catch      (MonadThrow (..))
 import           Control.Monad.IO.Class
-import           Data.Maybe             (fromMaybe)
-import           Data.Text              (Text)
-import qualified Data.Text              as Text
+import           Data.Maybe               (fromMaybe)
+import           Data.Text                (Text)
+import qualified Data.Text                as Text
 import           Data.Typeable
-import           Env
-import           Path                   hiding (PathParseException, parseAbsDir,
-                                         parseAbsFile, parseRelDir,
-                                         parseRelFile)
-import qualified Path                   as P (parseAbsDir, parseAbsFile,
-                                              parseRelDir, parseRelFile)
+import           Path                     hiding (PathParseException,
+                                           parseAbsDir, parseAbsFile,
+                                           parseRelDir, parseRelFile)
+import qualified Path                     as P (parseAbsDir, parseAbsFile,
+                                                parseRelDir, parseRelFile)
 import           Prelude
-import qualified System.Directory       as D
+import qualified System.Directory         as D
+import           System.Environment.Extra
 
 --------------------------------------------------------------------------------
 -- PathIOException definition
