@@ -1,4 +1,4 @@
-* ~d12-hs-path~
+* ~path-extra~
 
 [[https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master][file:https://travis-ci.org/d12frosted/d12-hs-path.svg?branch=master]]
 
@@ -31,10 +31,10 @@ Thanks to Chris Done now we have a better type for path.
 
 ** Using with ~stack~
 
-Just add =d12-hs-path= to =stack.yaml= file.
+Just add =path-extra= to =stack.yaml= file.
 
 #+BEGIN_SRC yaml
   extra-deps:
-  - git: https://github.com/d12frosted/d12-hs-path
-    commit: 063302ad18a3a7862f14415313c8adae1da31674
+  - git: https://github.com/d12frosted/path-extra
+    commit: 47d59985c7ad939598d35cbe471fe49b930b3484
 #+END_SRC
