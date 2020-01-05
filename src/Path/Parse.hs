@@ -49,18 +49,34 @@ import           System.Environment.Extra
 -- PathIOException definition
 
 data PathIOException
-  = InvalidDir FilePath
-  | InvalidFile FilePath
+  = InvalidDir (Path Abs Dir)
+  | InvalidFile (Path Abs File)
   deriving (Typeable)
 
 instance Exception PathIOException
 
 instance Show PathIOException where
-  show (InvalidDir fp)  = "'" ++ fp ++ "' is not a directory."
-  show (InvalidFile fp) = "'" ++ fp ++ "' is not a file."
+  show (InvalidDir fp)  = "'" ++ toFilePath fp ++ "' is not a directory."
+  show (InvalidFile fp) = "'" ++ toFilePath fp ++ "' is not a file."
 
 --------------------------------------------------------------------------------
 -- Parsers
+
+-- | Parse a directory path. If it's relative, then the absolute version
+-- is yielded, based off the working directory. Supports environment variables
+-- and '~/' in input.
+--
+-- Throws: 'PathParseException'
+--
+parseDirPath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
+parseDirPath fp = P.parseAbsDir =<< canonicalizePath =<< toAbsFilePath fp
+
+-- | Like 'parseDirPath', but throws an exception when directory doesn't exist.
+--
+-- Throws: 'PathParseException', 'PathIOException'
+--
+parseDirPath' :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
+parseDirPath' fp = verifyDir =<< parseDirPath fp
 
 -- | Get a location for an absolute directory. Produces a normalized
 --  path which always ends in a path separator.
@@ -78,14 +94,23 @@ parseAbsDir = P.parseAbsDir . Text.unpack
 parseRelDir :: (MonadThrow m) => Text -> m (Path Rel Dir)
 parseRelDir = P.parseRelDir . Text.unpack
 
--- | Parse a directory path. If it's relative, then the absolute version
+--------------------------------------------------------------------------------
+
+-- | Parse a file path. If it's relative, then the absolute version
 -- is yielded, based off the working directory. Supports environment variables
 -- and '~/' in input.
 --
+-- Throws: 'PathParseException'
+--
+parseFilePath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
+parseFilePath fp = P.parseAbsFile =<< canonicalizePath =<< toAbsFilePath fp
+
+-- | Like 'parseFilePath', but throws an exception when file doesn't exist.
+--
 -- Throws: 'PathParseException', 'PathIOException'
 --
-parseDirPath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
-parseDirPath fp = P.parseAbsDir =<< verifyDir =<< canonicalizePath =<< toAbsFilePath fp
+parseFilePath' :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
+parseFilePath' fp = verifyFile =<< parseFilePath fp
 
 -- | Get a location for an absolute file.
 --
@@ -101,14 +126,7 @@ parseAbsFile = P.parseAbsFile . Text.unpack
 parseRelFile :: (MonadThrow m) => Text -> m (Path Rel File)
 parseRelFile = P.parseRelFile . Text.unpack
 
--- | Parse a file path. If it's relative, then the absolute version
--- is yielded, based off the working directory. Supports environment variables
--- and '~/' in input.
---
--- Throws: 'PathParseException', 'PathIOException'
---
-parseFilePath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
-parseFilePath fp = P.parseAbsFile =<< verifyFile =<< canonicalizePath =<< toAbsFilePath fp
+--------------------------------------------------------------------------------
 
 -- | Get the current working directory.
 getWorkingDir :: (MonadIO m) => m (Path Abs Dir)
@@ -151,9 +169,9 @@ expandAtom atom
 --
 -- Throws: 'PathIOException'
 --
-verifyDir :: (MonadThrow m, MonadIO m) => FilePath -> m FilePath
+verifyDir :: (MonadThrow m, MonadIO m) => Path Abs Dir -> m (Path Abs Dir)
 verifyDir fp =
-  liftIO (D.doesDirectoryExist fp) >>=
+  liftIO (D.doesDirectoryExist . toFilePath $ fp) >>=
   \case
     True -> return fp
     False -> throwM $ InvalidDir fp
@@ -162,9 +180,9 @@ verifyDir fp =
 --
 -- Throws: 'PathIOException'
 --
-verifyFile :: (MonadThrow m, MonadIO m) => FilePath -> m FilePath
+verifyFile :: (MonadThrow m, MonadIO m) => Path Abs File -> m (Path Abs File)
 verifyFile fp =
-  liftIO (D.doesFileExist fp) >>=
+  liftIO (D.doesFileExist . toFilePath $ fp) >>=
   \case
     True -> return fp
     False -> throwM $ InvalidFile fp
