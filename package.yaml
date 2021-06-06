@@ -12,7 +12,7 @@ dependencies:
 - base >= 4.7 && < 5
 - env-extra == 1.0.0.0
 - exceptions >= 0.8
-- path >= 0.5
+- path >= 0.8
 - text >= 1.0 && < 2.0
 - transformers >= 0.5.2.0
 - directory >= 1.2
