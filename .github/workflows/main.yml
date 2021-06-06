@@ -7,29 +7,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: .stack-work cache
-      uses: actions/cache@v1
-      with:
-        path: .stack-work
-        key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-stack-work
+      - uses: haskell/actions/setup@v1.2.1
+        with:
+          ghc-version: 8.10.4
 
-    - name: $HOME/.stack cache
-      uses: actions/cache@v1
-      with:
-        path: ~/.stack
-        key: ${{ runner.os }}-stack-${{ hashFiles('stack.yaml.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-stack
+      - name: cabal cache
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ~/.cabal/packages
+            ~/.cabal/store
+            dist-newstyle
+          key: ${{ runner.os }}-${{ matrix.ghc }}
 
-    - name: Build the package
-      run: stack build
+      - name: Build the package
+        run: cabal build
 
-    - name: Prepare test env
-      run: mkdir $HOME/.config; mkdir -p $HOME/.local/share
+      - name: Prepare test env
+        run: |
+          mkdir -p $HOME/.config
+          mkdir -p $HOME/.local/share
 
-    - name: Test the package
-      run: stack test
+      - name: Test the package
+        run: cabal test
