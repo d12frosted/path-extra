@@ -1,63 +1,55 @@
+--------------------------------------------------------------------------------
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+
+--------------------------------------------------------------------------------
+
 -- | This module defines functions to parse type safe file paths from strings
 -- containing Unix environment variables (e.g. $HOME).
 --
 -- In most cases one should use 'parseDirPath' and 'parseFilePath' as they take
 -- care of any variables expansion and work also with relative paths successfully
 -- converting them into absolute.
-
---------------------------------------------------------------------------------
-
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE LambdaCase         #-}
-{-# LANGUAGE NoImplicitPrelude  #-}
-{-# LANGUAGE OverloadedStrings  #-}
-
---------------------------------------------------------------------------------
-
 module Path.Parse
-       ( module Path
-       , canonicalizePath
-       , getWorkingDir
-       , parseAbsDir
-       , parseAbsFile
-       , parseDirPath
-       , parseFilePath
-       , parseRelDir
-       , parseRelFile
-       ) where
+  ( module Path,
+    canonicalizePath,
+    getWorkingDir,
+    parseAbsDir,
+    parseAbsFile,
+    parseDirPath,
+    parseFilePath,
+    parseRelDir,
+    parseRelFile,
+  )
+where
 
 --------------------------------------------------------------------------------
 
-import           Control.Exception
-import           Control.Monad
-import           Control.Monad.Catch      (MonadThrow (..))
-import           Control.Monad.IO.Class
-import           Data.Maybe               (fromMaybe)
-import           Data.Text                (Text)
-import qualified Data.Text                as Text
-import           Data.Typeable
-import           Path                     hiding (PathParseException,
-                                           parseAbsDir, parseAbsFile,
-                                           parseRelDir, parseRelFile)
-import qualified Path                     as P (parseAbsDir, parseAbsFile,
-                                                parseRelDir, parseRelFile)
-import           Prelude
-import qualified System.Directory         as D
-import           System.Environment.Extra
-
---------------------------------------------------------------------------------
--- PathIOException definition
-
-data PathIOException
-  = InvalidDir (Path Abs Dir)
-  | InvalidFile (Path Abs File)
-  deriving (Typeable)
-
-instance Exception PathIOException
-
-instance Show PathIOException where
-  show (InvalidDir fp)  = "'" ++ toFilePath fp ++ "' is not a directory."
-  show (InvalidFile fp) = "'" ++ toFilePath fp ++ "' is not a file."
+import Control.Exception
+import Control.Monad
+import Control.Monad.Catch (MonadThrow (..))
+import Control.Monad.IO.Class
+import Data.Maybe (fromMaybe)
+import Data.Text (Text)
+import qualified Data.Text as Text
+import Data.Typeable
+import Path hiding
+  ( parseAbsDir,
+    parseAbsFile,
+    parseRelDir,
+    parseRelFile,
+  )
+import qualified Path as P
+  ( parseAbsDir,
+    parseAbsFile,
+    parseRelDir,
+    parseRelFile,
+  )
+import qualified System.Directory as D
+import System.Environment.Extra
+import Prelude
 
 --------------------------------------------------------------------------------
 -- Parsers
@@ -66,31 +58,27 @@ instance Show PathIOException where
 -- is yielded, based off the working directory. Supports environment variables
 -- and '~/' in input.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseDirPath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
 parseDirPath fp = P.parseAbsDir =<< canonicalizePath =<< toAbsFilePath fp
 
 -- | Like 'parseDirPath', but throws an exception when directory doesn't exist.
 --
--- Throws: 'PathParseException', 'PathIOException'
---
+-- Throws: 'PathException', 'PathIOException'
 parseDirPath' :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs Dir)
 parseDirPath' fp = verifyDir =<< parseDirPath fp
 
 -- | Get a location for an absolute directory. Produces a normalized
 --  path which always ends in a path separator.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseAbsDir :: (MonadThrow m) => Text -> m (Path Abs Dir)
 parseAbsDir = P.parseAbsDir . Text.unpack
 
 -- | Get a location for a relative directory. Produces a normalized
 -- path which always ends in a path separator.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseRelDir :: (MonadThrow m) => Text -> m (Path Rel Dir)
 parseRelDir = P.parseRelDir . Text.unpack
 
@@ -100,29 +88,25 @@ parseRelDir = P.parseRelDir . Text.unpack
 -- is yielded, based off the working directory. Supports environment variables
 -- and '~/' in input.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseFilePath :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
 parseFilePath fp = P.parseAbsFile =<< canonicalizePath =<< toAbsFilePath fp
 
 -- | Like 'parseFilePath', but throws an exception when file doesn't exist.
 --
--- Throws: 'PathParseException', 'PathIOException'
---
+-- Throws: 'PathException', 'PathIOException'
 parseFilePath' :: (MonadThrow m, MonadIO m) => Text -> m (Path Abs File)
 parseFilePath' fp = verifyFile =<< parseFilePath fp
 
 -- | Get a location for an absolute file.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseAbsFile :: (MonadThrow m) => Text -> m (Path Abs File)
 parseAbsFile = P.parseAbsFile . Text.unpack
 
 -- | Get a location for a relative file.
 --
--- Throws: 'PathParseException'
---
+-- Throws: 'PathException'
 parseRelFile :: (MonadThrow m) => Text -> m (Path Rel File)
 parseRelFile = P.parseRelFile . Text.unpack
 
@@ -139,13 +123,15 @@ toAbsFilePath fp
   | Text.isPrefixOf "~" fp = return fp
   | Text.isPrefixOf "/" fp = return fp
   | otherwise =
-    do wd <- liftIO $ D.canonicalizePath "."
-       return $ Text.concat [Text.pack wd,"/",fp]
+    do
+      wd <- liftIO $ D.canonicalizePath "."
+      return $ Text.concat [Text.pack wd, "/", fp]
 
 -- | Canonicalize path with support of environment variables and '~/'.
 canonicalizePath :: (MonadThrow m, MonadIO m) => Text -> m FilePath
-canonicalizePath fp = expandPath fp >>=
-                      liftIO . D.canonicalizePath . Text.unpack
+canonicalizePath fp =
+  expandPath fp
+    >>= liftIO . D.canonicalizePath . Text.unpack
 
 -- | Expand path by expanding all extracted atoms. In other words, replace all
 -- environment variables by their valus and `~/` by value of $HOME.
@@ -162,29 +148,32 @@ expandAtom atom
   | Text.isPrefixOf "$" atom = getEnv $ strip "$" atom
   | Text.isPrefixOf "~" atom = getEnv "HOME"
   | otherwise = pure atom
-  where strip p v =
-          fromMaybe v $ Text.stripPrefix p v
+  where
+    strip p v =
+      fromMaybe v $ Text.stripPrefix p v
 
 -- | Verify FilePath for being directory.
 --
 -- Throws: 'PathIOException'
---
 verifyDir :: (MonadThrow m, MonadIO m) => Path Abs Dir -> m (Path Abs Dir)
 verifyDir fp =
-  liftIO (D.doesDirectoryExist . toFilePath $ fp) >>=
-  \case
-    True -> return fp
-    False -> throwM $ InvalidDir fp
+  liftIO (D.doesDirectoryExist raw)
+    >>= \case
+      True -> return fp
+      False -> throwM $ InvalidAbsDir raw
+  where
+    raw = toFilePath fp
 
 -- | Verify FilePath for being file.
 --
 -- Throws: 'PathIOException'
---
 verifyFile :: (MonadThrow m, MonadIO m) => Path Abs File -> m (Path Abs File)
 verifyFile fp =
-  liftIO (D.doesFileExist . toFilePath $ fp) >>=
-  \case
-    True -> return fp
-    False -> throwM $ InvalidFile fp
+  liftIO (D.doesFileExist raw)
+    >>= \case
+      True -> return fp
+      False -> throwM $ InvalidAbsFile raw
+  where
+    raw = toFilePath fp
 
 --------------------------------------------------------------------------------
